@@ -105,15 +105,15 @@ const NewHotel = () => {
                 </div>
               ))}
               <div className="formInput">
-                <label>Featured</label>
+                <label>Vip</label>
                 <select id="featured" onChange={handleChange}>
                   <option value={false}>No</option>
                   <option value={true}>Yes</option>
                 </select>
               </div>
               <div className="selectRooms">
-                <label>Rooms</label>
-                <select id="rooms" multiple onChange={handleSelect}>
+                <label>Phòng</label>
+                <select id="rooms" onChange={handleSelect}>
                   {loading
                     ? "loading"
                     : data &&

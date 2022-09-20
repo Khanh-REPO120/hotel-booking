@@ -30,15 +30,20 @@
         }
       }
 
-      .right {
-        flex: 2;
+      form {
+        .right {
+          flex: 2;
 
-        form {
           display: flex;
           flex-wrap: wrap;
           gap: 30px;
           justify-content: space-between;
           padding: 0 20px;
+
+          select, textarea {
+            width: 100%;
+            padding: 10px;
+          }
 
           .formInput {
             width: 40%;
@@ -60,17 +65,18 @@
               border-bottom: 1px solid gray;
             }
           }
+        }
 
-          button {
-            width: 150px;
-            padding: 10px;
-            border: none;
-            background-color: teal;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-          }
+        button {
+          width: 150px;
+          padding: 10px;
+          border: none;
+          background-color: teal;
+          color: white;
+          font-weight: bold;
+          cursor: pointer;
+          margin-top: 10px;
+          float: right;
         }
       }
     }

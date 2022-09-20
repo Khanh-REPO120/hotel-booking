@@ -41,8 +41,8 @@ const NewRoom = () => {
           <h1>Add New Room</h1>
         </div>
         <div className="bottom">
-          <div className="right">
-            <form>
+          <form>
+            <div className="right">
               {roomInputs.map((input) => (
                 <div className="formInput" key={input.id}>
                   <label>{input.label}</label>
@@ -55,14 +55,14 @@ const NewRoom = () => {
                 </div>
               ))}
               <div className="formInput">
-                <label>Rooms</label>
+                <label>Số phòng</label>
                 <textarea
                   onChange={(e) => setRooms(e.target.value)}
-                  placeholder="give comma between room numbers."
+                  placeholder="đánh dấu phẩy giữa các số phòng, Ex: 102, 103"
                 />
               </div>
               <div className="formInput">
-                <label>Choose a hotel</label>
+                <label>Chọn hotel</label>
                 <select
                   id="hotelId"
                   onChange={(e) => setHotelId(e.target.value)}
@@ -75,9 +75,9 @@ const NewRoom = () => {
                       ))}
                 </select>
               </div>
-              <button onClick={handleClick}>Send</button>
-            </form>
-          </div>
+            </div>
+            <button onClick={handleClick}>Send</button>
+          </form>
         </div>
       </div>
     </div>
