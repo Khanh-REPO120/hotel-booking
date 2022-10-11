@@ -7,11 +7,13 @@ import { hotelInputs } from "../../formSource";
 import useFetch from "../../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BOOKING_TYPE } from '../../constant';
 
 const NewHotel = () => {
   const [files, setFiles] = useState("");
   const [info, setInfo] = useState({});
   const [rooms, setRooms] = useState([]);
+  const [err, setErr] = useState(null);
   let navigate = useNavigate();
 
   const { data, loading, error } = useFetch("/admin/rooms");
@@ -57,7 +59,10 @@ const NewHotel = () => {
       await axios.post("/admin/hotels", newhotel).then(function (response) {
         navigate('/admin/hotels');
       });
-    } catch (err) {console.log(err)}
+    } catch (err) {
+      setErr(err.response.data.message || 'Bạn hãy nhập đầy đủ thông tin');
+      console.log(err)
+    }
   };
   return (
     <div className="new">
@@ -65,8 +70,11 @@ const NewHotel = () => {
       <div className="newContainer">
         <Navbar />
         <div className="top">
-          <h1>Add New Product</h1>
+          <h1>Add New Item</h1>
         </div>
+        {err && (
+          <p style={{"padding": "20px 50px", "color": "red"}}>{err}</p>
+        )}
         <div className="bottom">
           <div className="left">
             <img
@@ -79,7 +87,7 @@ const NewHotel = () => {
             />
           </div>
           <div className="right">
-            <form>
+            <form onSubmit={handleClick}>
               <div className="formInput">
                 <label htmlFor="file">
                   Image: <DriveFolderUploadOutlinedIcon className="icon" />
@@ -91,6 +99,22 @@ const NewHotel = () => {
                   onChange={(e) => setFiles(e.target.files)}
                   style={{ display: "none" }}
                 />
+              </div>
+
+              <div className="selectRooms">
+                <label>Loại</label>
+                <select id="type" onChange={handleChange} required>
+                  <option key="0">--Chọn loại---</option>
+                  {
+                    Object.keys(BOOKING_TYPE).map((key, index) => {
+                      return (
+                        <option key={index} value={key}>
+                          {BOOKING_TYPE[key]}
+                        </option>
+                      );
+                    })
+                  }
+                </select>
               </div>
 
               {hotelInputs.map((input) => (
@@ -124,7 +148,7 @@ const NewHotel = () => {
                       ))}
                 </select>
               </div>
-              <button onClick={handleClick}>Send</button>
+              <button type="submit">Send</button>
             </form>
           </div>
         </div>

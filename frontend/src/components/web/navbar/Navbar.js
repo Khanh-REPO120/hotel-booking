@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 const Navbar = () => {
-  const { user } = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
 
   return (
     <div className="navbar web">
@@ -14,18 +14,22 @@ const Navbar = () => {
         {user ? (
           <div className="navItems">
             { user.username }
-            {user.isAdmin && (
+            {user.isAdmin ? (
               <button className="navButton">
                 <Link to="/admin" style={{ color: "inherit", textDecoration: "none" }}>
                   Dashboard
                 </Link>
+              </button>
+            ) : (
+              <button className="navButton" onClick={() => dispatch({ type: "LOGOUT" })}>
+                Đăng xuất
               </button>
             )}
           </div>
         ) : (
           <div className="navItems">
             <button className="navButton">
-              <Link to="/login" style={{ color: "inherit", textDecoration: "none" }}>
+              <Link to="/register" style={{ color: "inherit", textDecoration: "none" }}>
                 Đăng ký
               </Link>
             </button>

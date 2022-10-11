@@ -44,12 +44,6 @@ export const hotelInputs = [
     placeholder: "My Hotel",
   },
   {
-    id: "type",
-    label: "Loại",
-    type: "text",
-    placeholder: "hotel",
-  },
-  {
     id: "city",
     label: "Thành phố",
     type: "text",

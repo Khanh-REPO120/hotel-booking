@@ -51,6 +51,7 @@ export const getHotels = async (req, res, next) => {
     next(err);
   }
 };
+
 export const countByCity = async (req, res, next) => {
   const cities = req.query.cities.split(",");
   try {
@@ -64,20 +65,21 @@ export const countByCity = async (req, res, next) => {
     next(err);
   }
 };
+
 export const countByType = async (req, res, next) => {
   try {
-    const hotelCount = await Hotel.countDocuments({ type: "hotel" });
-    const apartmentCount = await Hotel.countDocuments({ type: "apartment" });
-    const resortCount = await Hotel.countDocuments({ type: "resort" });
-    const villaCount = await Hotel.countDocuments({ type: "villa" });
-    const cabinCount = await Hotel.countDocuments({ type: "cabin" });
+    const KsCount = await Hotel.countDocuments({ type: "khach_san" });
+    const NnCount = await Hotel.countDocuments({ type: "nha_nghi" });
+    const ChCount = await Hotel.countDocuments({ type: "can_ho" });
+    const RsCount = await Hotel.countDocuments({ type: "resort" });
+    const BtCount = await Hotel.countDocuments({ type: "biet_thu" });
 
     res.status(200).json([
-      { type: "hotel", count: hotelCount },
-      { type: "apartments", count: apartmentCount },
-      { type: "resorts", count: resortCount },
-      { type: "villas", count: villaCount },
-      { type: "cabins", count: cabinCount },
+      { type: "khach_san", count: KsCount },
+      { type: "nha_nghi", count: NnCount },
+      { type: "can_ho", count: ChCount },
+      { type: "resort", count: RsCount },
+      { type: "biet_thu", count: BtCount },
     ]);
   } catch (err) {
     next(err);

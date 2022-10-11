@@ -3,7 +3,7 @@ import "./featured.css";
 
 const Featured = () => {
   const { data, loading, error } = useFetch(
-    "/hotels/countByCity?cities=berlin,madrid,london"
+    "/v1/hotels/countByCity?cities=hanoi,tphcm,hoian"
   );
 
   return (
@@ -14,36 +14,36 @@ const Featured = () => {
         <>
           <div className="featuredItem">
             <img
-              src="https://cf.bstatic.com/xdata/images/city/max500/957801.webp?k=a969e39bcd40cdcc21786ba92826063e3cb09bf307bcfeac2aa392b838e9b7a5&o="
+              src="https://t-cf.bstatic.com/xdata/images/xphoto/300x240/140009654.jpg?k=a3325530ab89dc0e4af224d61d4cd084a386a089ff08076053437562b117745d&o="
               alt=""
               className="featuredImg"
             />
             <div className="featuredTitles">
-              <h1>Berlin</h1>
-              <h2>{data[0]} properties</h2>
+              <h1>Hà Nội</h1>
+              <h2>Cách đây 0,6km</h2>
             </div>
           </div>
 
           <div className="featuredItem">
             <img
-              src="https://cf.bstatic.com/xdata/images/city/max500/690334.webp?k=b99df435f06a15a1568ddd5f55d239507c0156985577681ab91274f917af6dbb&o="
+              src="https://t-cf.bstatic.com/xdata/images/xphoto/300x240/140009627.jpg?k=523e6e214e213e868befa01d37c57e1becaa09b829eb08a8804c0bc0273ea67c&o="
               alt=""
               className="featuredImg"
             />
             <div className="featuredTitles">
-              <h1>Madrid</h1>
-              <h2>{data[1]} properties</h2>
+              <h1>TP. Hồ Chí Minh</h1>
+              <h2>Cách đây 1.145km</h2>
             </div>
           </div>
           <div className="featuredItem">
             <img
-              src="https://cf.bstatic.com/xdata/images/city/max500/689422.webp?k=2595c93e7e067b9ba95f90713f80ba6e5fa88a66e6e55600bd27a5128808fdf2&o="
+              src="https://t-cf.bstatic.com/xdata/images/xphoto/300x240/140009652.jpg?k=362912454175551abcb0dc3ae419875b11628fccf6d95ed699a8063173c8f5a6&o="
               alt=""
               className="featuredImg"
             />
             <div className="featuredTitles">
-              <h1>London</h1>
-              <h2>{data[2]} properties</h2>
+              <h1>Hội An</h1>
+              <h2>Cách đây 630km</h2>
             </div>
           </div>
         </>
