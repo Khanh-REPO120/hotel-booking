@@ -65,7 +65,7 @@ const New = ({ inputs, title }) => {
           </div>
           <div className="right">
             <form>
-              <div className="formInput">
+              <div className="formInput" style={{ "width": "100%" }}>
                 <label htmlFor="file">
                   Image: <DriveFolderUploadOutlinedIcon className="icon" />
                 </label>

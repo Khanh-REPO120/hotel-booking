@@ -5,3 +5,13 @@ export const BOOKING_TYPE = {
     "resort": "Resort",
     "biet_thu": "Biệt thự",
 }
+
+export const BOOKING_LOCATION = [
+    'Hà Nội',
+    'TP. Hồ Chí Minh',
+    'Phú Quốc',
+    'Đà Lạt',
+    'Đà Nẵng',
+    'Hải Phòng',
+    'Nha Trang',
+]

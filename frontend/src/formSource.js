@@ -43,12 +43,12 @@ export const hotelInputs = [
     type: "text",
     placeholder: "My Hotel",
   },
-  {
-    id: "city",
-    label: "Thành phố",
-    type: "text",
-    placeholder: "Hà nội",
-  },
+  // {
+  //   id: "city",
+  //   label: "Thành phố",
+  //   type: "text",
+  //   placeholder: "Hà nội",
+  // },
   {
     id: "address",
     label: "Địa chỉ",

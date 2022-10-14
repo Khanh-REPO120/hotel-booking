@@ -7,7 +7,7 @@ import { hotelInputs } from "../../formSource";
 import useFetch from "../../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BOOKING_TYPE } from '../../constant';
+import { BOOKING_TYPE, BOOKING_LOCATION } from '../../constant';
 
 const NewHotel = () => {
   const [files, setFiles] = useState("");
@@ -88,9 +88,9 @@ const NewHotel = () => {
           </div>
           <div className="right">
             <form onSubmit={handleClick}>
-              <div className="formInput">
+              <div className="formInput" style={{ "width": "100%" }}>
                 <label htmlFor="file">
-                  Image: <DriveFolderUploadOutlinedIcon className="icon" />
+                  Banner: <DriveFolderUploadOutlinedIcon className="icon" />
                 </label>
                 <input
                   type="file"
@@ -117,6 +117,22 @@ const NewHotel = () => {
                 </select>
               </div>
 
+              <div className="selectRooms">
+                <label>Địa điểm</label>
+                <select id="city" onChange={handleChange} required>
+                  <option key="0">--Chọn thành phố---</option>
+                  {
+                    BOOKING_LOCATION.map((location, index) => {
+                      return (
+                        <option key={index} value={location}>
+                          {location}
+                        </option>
+                      );
+                    })
+                  }
+                </select>
+              </div>
+
               {hotelInputs.map((input) => (
                 <div className="formInput" key={input.id}>
                   <label>{input.label}</label>
@@ -129,7 +145,7 @@ const NewHotel = () => {
                 </div>
               ))}
               <div className="formInput">
-                <label>Vip</label>
+                <label>Vip (Show Home)</label>
                 <select id="featured" onChange={handleChange}>
                   <option value={false}>No</option>
                   <option value={true}>Yes</option>
