@@ -78,7 +78,7 @@
 }
 
 .headerSearchText {
-  color: lightgray;
+  color: #6e6c6c;
   cursor: pointer;
 }
 
@@ -126,3 +126,17 @@
 .optionCounterButton:disabled {
   cursor: not-allowed;
 }
+
+.headerSearchSelect {
+  padding: 10px 30px 10px 10px;
+  border: none;
+  background: #fff;
+  outline: none;
+  -moz-outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-size: 16px;
+}
+
+.headerSearchSelect:focus {outline:none;}

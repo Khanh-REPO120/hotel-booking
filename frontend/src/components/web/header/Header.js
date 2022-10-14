@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { SearchContext } from "../../../context/SearchContext";
 import { AuthContext } from "../../../context/AuthContext";
+import { BOOKING_LOCATION } from '../../../constant';
 
 const Header = ({ type }) => {
   const [destination, setDestination] = useState("");
@@ -90,12 +91,24 @@ const Header = ({ type }) => {
             <div className="headerSearch">
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faBed} className="headerIcon" />
-                <input
+                <select className="headerSearchSelect" onChange={(e) => setDestination(e.target.value)} required>
+                  <option key="0">--Bạn muốn đến đâu?---</option>
+                  {
+                    BOOKING_LOCATION.map((location, index) => {
+                      return (
+                        <option key={index} value={location}>
+                          {location}
+                        </option>
+                      );
+                    })
+                  }
+                </select>
+                {/*<input
                   type="text"
                   placeholder="Bạn muốn đến đâu?"
                   className="headerSearchInput"
                   onChange={(e) => setDestination(e.target.value)}
-                />
+                />*/}
               </div>
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" />

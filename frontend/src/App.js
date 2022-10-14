@@ -14,6 +14,7 @@ import { AuthContext } from "./context/AuthContext";
 import { hotelColumns, roomColumns, userColumns } from "./datatablesource";
 import NewHotel from "./pages/newHotel/NewHotel";
 import NewRoom from "./pages/newRoom/NewRoom";
+import ListWeb from "./pages/listWeb/ListWeb";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -40,6 +41,8 @@ function App() {
               }
             />
           </Route>
+          <Route path="/hotels" element={<ListWeb/>}/>
+          {/*<Route path="/hotels/:id" element={<Hotel/>}/>*/}
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
           <Route path="admin">
