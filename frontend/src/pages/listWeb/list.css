@@ -32,6 +32,14 @@
   flex-direction: column;
   gap: 5px;
   margin-bottom: 10px;
+  position: relative;
+}
+
+.lsItem .rdrCalendarWrapper {
+  position: absolute;
+  top: 60px;
+  border: 1px solid #dedede;
+  z-index: 2;
 }
 
 .lsItem>label{

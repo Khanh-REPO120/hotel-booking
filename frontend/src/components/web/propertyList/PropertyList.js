@@ -1,9 +1,33 @@
+import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import useFetch from "../../../hooks/useFetch";
 import "./propertyList.css";
 import { BOOKING_TYPE } from '../../../constant';
+import { SearchContext } from "../../../context/SearchContext";
 
 const PropertyList = () => {
+  const [destination, setDestination] = useState("");
   const { data, loading, error } = useFetch("/v1/hotels/countByType");
+  const [dates, setDates] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
+  const [options, setOptions] = useState({
+    adult: 1,
+    children: 0,
+    room: 1,
+  });
+
+  const navigate = useNavigate();
+  const { dispatch } = useContext(SearchContext);
+
+  const handleSearch = (typeInput) => {
+    dispatch({ type: "NEW_SEARCH", payload: { destination, type: typeInput, dates, options } });
+    navigate("/hotels", { state: { destination, type: typeInput, dates, options } });
+  };
 
   const images = [
     "https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o=",
@@ -20,7 +44,7 @@ const PropertyList = () => {
         <>
           {data &&
             images.map((img,i) => (
-              <div className="pListItem" key={i}>
+              <div className="pListItem" key={i} onClick={() => handleSearch(data[i]?.type)}>
                 <img
                   src={img}
                   alt=""

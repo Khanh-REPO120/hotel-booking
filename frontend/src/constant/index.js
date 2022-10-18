@@ -14,4 +14,5 @@ export const BOOKING_LOCATION = [
     'Đà Nẵng',
     'Hải Phòng',
     'Nha Trang',
+    'Hội An',
 ]

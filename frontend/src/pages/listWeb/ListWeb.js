@@ -7,10 +7,12 @@ import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import SearchItem from "../../components/web/searchItem/SearchItem";
 import useFetch from "../../hooks/useFetch";
+import { BOOKING_LOCATION, BOOKING_TYPE } from '../../constant';
 
 const ListWeb = () => {
   const location = useLocation();
   const [destination, setDestination] = useState(location.state.destination);
+  const [type, setType] = useState(location.state.type || '');
   const [dates, setDates] = useState(location.state.dates);
   const [openDate, setOpenDate] = useState(false);
   const [options, setOptions] = useState(location.state.options);
@@ -18,7 +20,7 @@ const ListWeb = () => {
   const [max, setMax] = useState(undefined);
 
   const { data, loading, error, reFetch } = useFetch(
-    `/hotels?city=${destination}&min=${min || 0 }&max=${max || 999}`
+    `/v1/hotels?city=${destination}&type=${type}&min=${min || 0 }&max=${max || 999}`
   );
 
   const handleClick = () => {
@@ -32,10 +34,36 @@ const ListWeb = () => {
       <div className="listContainer">
         <div className="listWrapper">
           <div className="listSearch">
-            <h1 className="lsTitle">Search</h1>
+            <h1 className="lsTitle">Tìm kiếm</h1>
             <div className="lsItem">
-              <label>Destination</label>
-              <input placeholder={destination} type="text" />
+              <label>Điểm đến</label>
+              <select className="headerSearchSelect" onChange={(e) => setDestination(e.target.value)}>
+                <option key="0" value="">--Bạn muốn đến đâu?---</option>
+                {
+                  BOOKING_LOCATION.map((location, index) => {
+                    return (
+                      <option key={index} value={location} selected={ destination == location }>
+                        {location}
+                      </option>
+                    );
+                  })
+                }
+              </select>
+            </div>
+            <div className="lsItem">
+              <label>Loại</label>
+              <select className="headerSearchSelect" onChange={(e) => setType(e.target.value)}>
+                <option key="0" value="">--Tất cả---</option>
+                {
+                  Object.keys(BOOKING_TYPE).map((key, index) => {
+                    return (
+                      <option key={index} value={key} selected={ type == key }>
+                        {BOOKING_TYPE[key]}
+                      </option>
+                    );
+                  })
+                }
+              </select>
             </div>
             <div className="lsItem">
               <label>Check-in Date</label>
@@ -52,11 +80,11 @@ const ListWeb = () => {
               )}
             </div>
             <div className="lsItem">
-              <label>Options</label>
+              <label>Tùy chọn</label>
               <div className="lsOptions">
                 <div className="lsOptionItem">
                   <span className="lsOptionText">
-                    Min price <small>per night</small>
+                    Giá tối thiểu
                   </span>
                   <input
                     type="number"
@@ -66,7 +94,7 @@ const ListWeb = () => {
                 </div>
                 <div className="lsOptionItem">
                   <span className="lsOptionText">
-                    Max price <small>per night</small>
+                    Giá tối đa
                   </span>
                   <input
                     type="number"
@@ -75,7 +103,7 @@ const ListWeb = () => {
                   />
                 </div>
                 <div className="lsOptionItem">
-                  <span className="lsOptionText">Adult</span>
+                  <span className="lsOptionText">Người lớn</span>
                   <input
                     type="number"
                     min={1}
@@ -84,7 +112,7 @@ const ListWeb = () => {
                   />
                 </div>
                 <div className="lsOptionItem">
-                  <span className="lsOptionText">Children</span>
+                  <span className="lsOptionText">Trẻ con</span>
                   <input
                     type="number"
                     min={0}
@@ -93,7 +121,7 @@ const ListWeb = () => {
                   />
                 </div>
                 <div className="lsOptionItem">
-                  <span className="lsOptionText">Room</span>
+                  <span className="lsOptionText">Phòng</span>
                   <input
                     type="number"
                     min={1}
@@ -103,16 +131,24 @@ const ListWeb = () => {
                 </div>
               </div>
             </div>
-            <button onClick={handleClick}>Search</button>
+            <button onClick={handleClick}>Lọc</button>
           </div>
           <div className="listResult">
             {loading ? (
               "loading"
             ) : (
               <>
-                {data.map((item) => (
-                  <SearchItem item={item} key={item._id} />
-                ))}
+                {
+                  data.length > 0 ? (
+                    <>
+                      {data.map((item) => (
+                        <SearchItem item={item} key={item._id} />
+                      ))}
+                    </>
+                    ) : (
+                      <p>Đang cập nhật ...</p>
+                    )
+                }
               </>
             )}
           </div>

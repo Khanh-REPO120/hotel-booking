@@ -1,5 +1,6 @@
 import Hotel from "../models/Hotel.js";
 import Room from "../models/Room.js";
+import { cleanObj } from "../utils/helpers.js";
 
 export const createHotel = async (req, res, next) => {
   const newHotel = new Hotel(req.body);
@@ -40,7 +41,10 @@ export const getHotel = async (req, res, next) => {
   }
 };
 export const getHotels = async (req, res, next) => {
-  const { min, max, ...others } = req.query;
+  let { min, max, ...others } = req.query;
+
+  others = cleanObj(others);
+
   try {
     const hotels = await Hotel.find({
       ...others,
