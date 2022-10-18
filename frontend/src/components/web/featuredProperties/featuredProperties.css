@@ -6,11 +6,19 @@
   gap: 20px;
 }
 
-.fpItem{
+.fpItem {
   flex: 1;
   gap: 10px;
   display: flex;
   flex-direction: column;
+}
+
+.fpItem .infoItem {
+  flex: 1;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  color: #000;
 }
 
 .fpImg{
