@@ -91,7 +91,7 @@ const Hotel = () => {
               />
               <div className="sliderWrapper">
                 <img
-                  src={data.photos[slideNumber]}
+                  src={data.photos[slideNumber] || 'https://t-cf.bstatic.com/static/img/theme-index/bg_resorts_new/6e8294d75f648eab2cd2818f0a40854367e584a5.jpg'}
                   alt=""
                   className="sliderImg"
                 />

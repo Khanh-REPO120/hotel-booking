@@ -48,14 +48,14 @@
   font-weight: 500;
 }
 
-.hotelImages {
+/*.hotelImages {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-}
+}*/
 
 .hotelImgWrapper {
-  width: 33%;
+  width: 100%;
 }
 
 .hotelImg {

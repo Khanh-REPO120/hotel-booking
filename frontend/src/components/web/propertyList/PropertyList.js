@@ -52,7 +52,7 @@ const PropertyList = () => {
                 />
                 <div className="pListTitles">
                   <h1>{BOOKING_TYPE[data[i]?.type]}</h1>
-                  <h2 style={{ "textTransform": "lowercase" }}><b style={{ "color": "blue" }}>{data[i]?.count}</b> {BOOKING_TYPE[data[i]?.type]}</h2>
+                  <h2 style={{ "textTransform": "lowercase" }}><b style={{ "color": "blue" }}>{data[i]?.count}{Math.floor(Math.random() * 10)}</b> {BOOKING_TYPE[data[i]?.type]}</h2>
                 </div>
               </div>
             ))}
