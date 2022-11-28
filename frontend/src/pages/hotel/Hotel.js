@@ -37,7 +37,13 @@ const Hotel = () => {
     return diffDays;
   }
 
-  const days = ''; // dayDifference(dates[0].endDate, dates[0].startDate);
+  console.log(options, 111);
+
+  let days = 1;
+
+  if (dates.length) {
+    days = dayDifference(dates[0].endDate, dates[0].startDate);
+  } 
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -71,7 +77,7 @@ const Hotel = () => {
         "loading"
       ) : (
         <div className="hotelContainer homeContainer">
-         {/* {open && (
+         {open && (
             <div className="slider">
               <FontAwesomeIcon
                 icon={faCircleXmark}
@@ -96,7 +102,7 @@ const Hotel = () => {
                 onClick={() => handleMove("r")}
               />
             </div>
-          )}*/}
+          )}
           <div className="hotelWrapper">
             <button className="bookNow">Đặt trước hoặc đặt ngay!</button>
             <h1 className="hotelTitle">{data.name}</h1>
@@ -134,7 +140,8 @@ const Hotel = () => {
                   excellent location score of 9.8!
                 </span>*/}
                 <h2>
-                  <b>${data.cheapestPrice}</b>
+                  <b>${days * data.cheapestPrice * (options.room || 1)}</b> ({days}{" "}
+                  đêm, {options.room || 1}{" "} phòng)
                 </h2>
                 <button onClick={handleClick}>Đặt trước hoặc đặt ngay!</button>
               </div>
