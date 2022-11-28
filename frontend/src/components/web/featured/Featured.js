@@ -43,7 +43,7 @@ const Featured = () => {
             />
             <div className="featuredTitles">
               <h1>Hà Nội</h1>
-              <h2>Cách đây 0,6km</h2>
+              <h2>Cách đây 766km</h2>
             </div>
           </div>
 
@@ -55,7 +55,7 @@ const Featured = () => {
             />
             <div className="featuredTitles">
               <h1>TP. Hồ Chí Minh</h1>
-              <h2>Cách đây 1.145km</h2>
+              <h2>Cách đây 874,6km</h2>
             </div>
           </div>
 
@@ -67,7 +67,7 @@ const Featured = () => {
             />
             <div className="featuredTitles">
               <h1>Hội An</h1>
-              <h2>Cách đây 630km</h2>
+              <h2>Cách đây 41,7km</h2>
             </div>
           </div>
         </>
