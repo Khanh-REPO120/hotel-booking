@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 const HotelSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -45,6 +45,7 @@ const HotelSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  comments: [{ type: Schema.Types.ObjectId, ref: "Comment"}]
 });
 
 export default mongoose.model("Hotel", HotelSchema);
