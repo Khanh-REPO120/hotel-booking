@@ -152,9 +152,6 @@ export const updateOrder = async (req, res, next) => {
   }
 };
 
-
-
-
 export const getAllOrder = async (req, res, next) => {
     try {
         const { limit, page, is_delete, search } = req.query;
@@ -186,4 +183,29 @@ export const getAllOrder = async (req, res, next) => {
       } catch (error) {
         next(error);
       }
+}
+
+export const activeOrderSendMail = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const orderDetail = await Order.findById(id);
+
+        if (!orderDetail) return res.status(400).send({ msg: "Order not existed" });
+    
+        if (orderDetail.is_delete === true) return res.status(400).send({ msg: "Order has deleted" });
+
+        if (orderDetail.is_active === true) return res.status(400).send({ msg: "Order has send mail" });
+
+        const handleActiveOrder = await Order.findByIdAndUpdate(id, { is_active: true}, {new: true, upsert: true})
+
+        if (handleActiveOrder) {
+            // sendMail
+        }
+
+        res.send({message: 'send mail order success', order: handleActiveOrder})
+    
+    } catch (error) {
+        next(error)
+    }
 }

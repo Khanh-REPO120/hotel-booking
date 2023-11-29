@@ -12,6 +12,7 @@ const OrderSchema = new mongoose.Schema(
     total_price: Number,
     customer_info: { type: Schema.Types.ObjectId, ref: "User" },
     description: String,
+    is_active: { type: Boolean, default: false},
     is_delete: { type: Boolean, default: false}
   },
   { timestamps: true }
