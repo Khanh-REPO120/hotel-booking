@@ -63,6 +63,10 @@ export const getMyOrders = async (req, res, next) => {
         path: "book_data.rooms",
         model: "Room",
       })
+      .populate({
+        path: "customer_info",
+        model: "User",
+      })
       .sort({ createdAt: -1 });
 
     res.send(orders);
@@ -137,7 +141,7 @@ export const updateOrder = async (req, res, next) => {
     if (orderDetail.is_delete === true) return res.status(400).send({ msg: "Order has deleted" });
 
     if (is_delete === true) {
-        update.is_delete === true;
+        update.is_delete = true;
     }
 
     if (description) {

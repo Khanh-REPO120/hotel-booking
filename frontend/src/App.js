@@ -16,6 +16,7 @@ import NewHotel from "./pages/newHotel/NewHotel";
 import NewRoom from "./pages/newRoom/NewRoom";
 import ListWeb from "./pages/listWeb/ListWeb";
 import Hotel from "./pages/hotel/Hotel";
+import Order from "./pages/order/Order";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -43,6 +44,7 @@ function App() {
             />
           </Route>
           <Route path="/hotels" element={<ListWeb/>}/>
+          <Route path="/my-orders" element={<Order/>}/>
           <Route path="/hotels/:id" element={<Hotel/>}/>
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />

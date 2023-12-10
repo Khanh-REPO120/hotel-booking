@@ -13,13 +13,18 @@ const Navbar = () => {
         </Link>
         {user ? (
           <div className="navItems">
-            { user.username }
+            {user.username}
+            <button className="navButton">
+              <Link to="/my-orders" style={{ color: "inherit", textDecoration: "none" }}>
+                My Order
+              </Link>
+            </button>
             {user.isAdmin ? (
               <button className="navButton">
                 <Link to="/admin" style={{ color: "inherit", textDecoration: "none" }}>
                   Dashboard
                 </Link>
-              </button>
+              </button> 
             ) : (
               <button className="navButton" onClick={() => dispatch({ type: "LOGOUT" })}>
                 Đăng xuất
