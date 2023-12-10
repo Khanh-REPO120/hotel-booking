@@ -49,4 +49,4 @@ const HotelSchema = new mongoose.Schema({
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment"}]
 });
 
-export default mongoose.model("Hotel", HotelSchema);
+export default mongoose.model("Hotels", HotelSchema);

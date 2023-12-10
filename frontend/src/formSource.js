@@ -1,3 +1,17 @@
+export const userLoginInputs = [
+  {
+    id: "username",
+    label: "Username",
+    type: "text",
+    placeholder: "khanhlqgcd",
+  },
+  {
+    id: "password",
+    label: "Password",
+    type: "password",
+  },
+]
+
 export const userInputs = [
   {
     id: "username",
