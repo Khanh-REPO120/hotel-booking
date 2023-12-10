@@ -1,4 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
+import Schema from "mongoose";
 const OrderSchema = new mongoose.Schema(
   {
     book_data: [
