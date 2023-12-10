@@ -2,7 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken";
-import {sendMail} from "./sendMail.js";
+import { sendMail } from "./sendMail.js";
 
 export const register = async (req, res, next) => {
   try {
@@ -14,7 +14,7 @@ export const register = async (req, res, next) => {
       password: hash,
     });
 
-    sendMail(newUser.email, 'register', 'https://booking.com')
+    sendMail(newUser.email, "register", "https://booking.com");
     await newUser.save();
     res.status(200).send("User has been created.");
   } catch (err) {
@@ -26,17 +26,10 @@ export const login = async (req, res, next) => {
     const user = await User.findOne({ username: req.body.username });
     if (!user) return next(createError(404, "User not found!"));
 
-    const isPasswordCorrect = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
-    if (!isPasswordCorrect)
-      return next(createError(400, "Wrong password or username!"));
+    const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password);
+    if (!isPasswordCorrect) return next(createError(400, "Wrong password or username!"));
 
-    const token = jwt.sign(
-      { id: user._id, isAdmin: user.isAdmin },
-      process.env.JWT
-    );
+    const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT);
 
     const { password, isAdmin, ...otherDetails } = user._doc;
     res
@@ -44,8 +37,22 @@ export const login = async (req, res, next) => {
         httpOnly: true,
       })
       .status(200)
-      .json({ details: { ...otherDetails, ...{isAdmin: user.isAdmin} }, isAdmin });
+      .json({ details: { ...otherDetails, ...{ isAdmin: user.isAdmin } }, isAdmin });
   } catch (err) {
+    next(err);
+  }
+};
+
+export const editProfile = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+
+    if (!user) return next(createError(404, "User not found!"));
+
+    const updateUser = await User.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true, upsert: true });
+
+    res.status(200).json(updateUser);
+  } catch (error) {
     next(err);
   }
 };

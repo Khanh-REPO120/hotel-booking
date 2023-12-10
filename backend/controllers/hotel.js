@@ -34,7 +34,11 @@ export const deleteHotel = async (req, res, next) => {
 };
 export const getHotel = async (req, res, next) => {
   try {
-    const hotel = await Hotel.findById(req.params.id);
+    const hotel = await Hotel.findById(req.params.id).populate({
+      path: "rooms",
+      model: "Room",
+      // select: ""
+    })
     res.status(200).json(hotel);
   } catch (err) {
     next(err);
@@ -50,8 +54,11 @@ export const getHotels = async (req, res, next) => {
   try {
     const hotels = await Hotel.find({
       ...others,
-    }).limit(req.query.limit);
-    console.log(hotels)
+    }).limit(req.query.limit).populate({
+      path: "rooms",
+      model: "Room",
+      // select: ""
+    });
     res.status(200).json(hotels);
   } catch (err) {
     next(err);
