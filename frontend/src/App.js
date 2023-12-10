@@ -23,11 +23,12 @@ import { useDispatch } from "react-redux";
 import io from "socket.io-client";
 import { APPTYPES } from "./redux/reducers/index";
 import Chat from "./pages/chat/Chat";
+import ChatId from "./pages/chat/ChatId";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
   const dispatch = useDispatch();
-
+  const { user } = useContext(AuthContext);
   const ProtectedRoute = ({ children }) => {
     const { user } = useContext(AuthContext);
 
@@ -41,7 +42,6 @@ function App() {
   useEffect(() => {
     const socket = io("http://127.0.0.1:8800");
 
-    console.log(socket);
     dispatch({ type: APPTYPES.SOCKET, payload: socket });
     return () => socket.close();
   }, [dispatch]);
@@ -49,9 +49,10 @@ function App() {
   return (
     <div className={darkMode ? "app dark" : "app"}>
       <BrowserRouter>
-        <ProtectedRoute>
-          <SocketClient />
-        </ProtectedRoute>
+        {
+          user?._id && <SocketClient />
+        }
+         
 
         <Routes>
           <Route path="/">
@@ -67,6 +68,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Chat />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat/:id"
+            element={
+              <ProtectedRoute>
+                <ChatId/>
               </ProtectedRoute>
             }
           />

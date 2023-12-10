@@ -1,21 +1,21 @@
 import { DeleteData, MESSAGE_TYPES } from '../reducers/index'
 import axios from 'axios';
 
-export const getInfoUser = ({user, messageReducer}) => (dispatch) => {
-    if(messageReducer.users.every(item => item._id !== user._id)){
+export const getInfoUser = ({user, message}) => (dispatch) => {
+    if(message?.users?.every(item => item._id !== user._id)){
         dispatch({
             type: MESSAGE_TYPES.GET_INFO_USER,
             payload: user
         })
     }
 } 
-export const createMessage = ({message, auth, socketReducer}) => async (dispatch) => {
+export const createMessage = ({message, auth, socket}) => async (dispatch) => {
     dispatch({
         type: MESSAGE_TYPES.CREATE_MESSAGE,
         payload: message
     })
 
-    socketReducer.emit("createMessage", {...message})
+    socket.emit("createMessage", {...message})
     
     try {
         await axios.post('/messages/message', message)
@@ -56,9 +56,8 @@ export const getMessage = ({auth, id, page = 1}) => async (dispatch) => {
     } catch (err) {
     }
 }
-export const deleteMessage = ({msg, auth, messageReducer}) => async (dispatch) => {
-    const newData = DeleteData(messageReducer.data, msg._id)
-    // console.log(newData)
+export const deleteMessage = ({msg, auth, message}) => async (dispatch) => {
+    const newData = DeleteData(message.data, msg._id)
     dispatch({
         type: MESSAGE_TYPES.DELETE_MESSAGE, 
         payload: {newData, _id: msg.recipient}}) 

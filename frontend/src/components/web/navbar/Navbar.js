@@ -14,6 +14,11 @@ const Navbar = () => {
           <div className="navItems">
             {user.username}
             <button className="navButton">
+              <Link to="/chat" style={{ color: "inherit", textDecoration: "none" }}>
+                Chat
+              </Link>
+            </button>
+            <button className="navButton">
               <Link to="/my-orders" style={{ color: "inherit", textDecoration: "none" }}>
                 My Order
               </Link>

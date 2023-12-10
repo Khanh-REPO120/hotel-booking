@@ -12,8 +12,9 @@ export const SocketServer = socket => {
     })
     // Message Socket
     socket.on("createMessage", message => {
-        // console.log(message)
-        const user = users.find(user => user.id === message.recipient)
-        user && socket.to(`${user.socketID}`).emit("createMessageToClient", message)
+        const user = users.filter(user => user.id === message.recipient)
+        user.forEach((item) => {
+            item && socket.to(`${item.socketID}`).emit("createMessageToClient", message)
+        })
     })
 }

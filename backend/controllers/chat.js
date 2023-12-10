@@ -1,5 +1,6 @@
 import Message from "../models/Message.js";
 import Conversation from "../models/Conversation.js";
+import User from "../models/User.js";
 class Messagefeatures {
   constructor(query, queryString) {
     this.query = query;
@@ -15,18 +16,29 @@ class Messagefeatures {
   }
 }
 
+export const searchUser = async (req, res, next) => {
+  try {
+    const users = await User.find({ username: { $regex: req.query.username } })
+
+    res.json({ users });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createMessage = async (req, res, next) => {
   try {
     const { text, recipient, media } = req.body;
+    console.log(req.user)
 
     if (!recipient || (!text.trim() && media.length === 0)) return;
 
     const new_conversation = await Conversation.findOneAndUpdate(
       {
-        $or: [{ recipients: [req.user._id, recipient] }, { recipients: [recipient, req.user._id] }],
+        $or: [{ recipients: [req.user.id, recipient] }, { recipients: [recipient, req.user.id] }],
       },
       {
-        recipients: [req.user._id, recipient],
+        recipients: [req.user.id, recipient],
         text,
         media,
       },
@@ -35,7 +47,7 @@ export const createMessage = async (req, res, next) => {
 
     const new_message = new Message({
       conversation: new_conversation._id,
-      sender: req.user._id,
+      sender: req.user.id,
       recipient,
       text,
       media,
@@ -52,7 +64,7 @@ export const getUserConversation = async (req, res) => {
   try {
     const feature = new Messagefeatures(
       Conversation.find({
-        recipients: req.user._id,
+        recipients: req.user.id,
       }),
       req.query
     ).paginating();
@@ -72,8 +84,8 @@ export const getMessage = async (req, res) => {
     const feature = new Messagefeatures(
       Message.find({
         $or: [
-          { sender: req.user._id, recipient: req.params.id },
-          { sender: req.params.id, recipient: req.user._id },
+          { sender: req.user.id, recipient: req.params.id },
+          { sender: req.params.id, recipient: req.user.id },
         ],
       }),
       req.query
@@ -91,7 +103,7 @@ export const getMessage = async (req, res) => {
 };
 export const deleteMessage = async (req, res) => {
   try {
-    await Message.findOneAndDelete({ _id: req.params.id, sender: req.user._id });
+    await Message.findOneAndDelete({ _id: req.params.id, sender: req.user.id });
     res.json({ msg: "Delete Message  Success !" });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
@@ -100,7 +112,7 @@ export const deleteMessage = async (req, res) => {
 export const deleteConversation = async (req, res) => {
   try {
     const new_conversation = await Conversation.findOneAndDelete({
-      $or: [{ recipients: [req.user._id, req.params.id] }, { recipients: [req.params.id, req.user._id] }],
+      $or: [{ recipients: [req.user.id, req.params.id] }, { recipients: [req.params.id, req.user.id] }],
     });
     await Message.deleteMany({ conversation: new_conversation._id });
     res.json({ msg: "Delete Conversation Success !" });
