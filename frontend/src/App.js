@@ -5,6 +5,7 @@ import Register from "./pages/register/Register";
 import List from "./pages/list/List";
 import Single from "./pages/single/Single";
 import New from "./pages/new/New";
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { userInputs } from "./formSource";
 import "./style/dark.scss";
@@ -17,9 +18,15 @@ import NewRoom from "./pages/newRoom/NewRoom";
 import ListWeb from "./pages/listWeb/ListWeb";
 import Hotel from "./pages/hotel/Hotel";
 import Order from "./pages/order/Order";
+import SocketClient from "./socketClient";
+import { useDispatch } from "react-redux";
+import io from "socket.io-client";
+import { APPTYPES } from "./redux/reducers/index";
+import Chat from "./pages/chat/Chat";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
+  const dispatch = useDispatch();
 
   const ProtectedRoute = ({ children }) => {
     const { user } = useContext(AuthContext);
@@ -31,23 +38,38 @@ function App() {
     return children;
   };
 
+  useEffect(() => {
+    const socket = io("http://127.0.0.1:8800");
+
+    console.log(socket);
+    dispatch({ type: APPTYPES.SOCKET, payload: socket });
+    return () => socket.close();
+  }, [dispatch]);
+
   return (
     <div className={darkMode ? "app dark" : "app"}>
       <BrowserRouter>
+        <ProtectedRoute>
+          <SocketClient />
+        </ProtectedRoute>
+
         <Routes>
           <Route path="/">
-            <Route
-              index
-              element={
-                <Home />
-              }
-            />
+            <Route index element={<Home />} />
           </Route>
-          <Route path="/hotels" element={<ListWeb/>}/>
-          <Route path="/my-orders" element={<Order/>}/>
-          <Route path="/hotels/:id" element={<Hotel/>}/>
+          <Route path="/hotels" element={<ListWeb />} />
+          <Route path="/my-orders" element={<Order />} />
+          <Route path="/hotels/:id" element={<Hotel />} />
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                <Chat />
+              </ProtectedRoute>
+            }
+          />
           <Route path="admin">
             <Route
               index
@@ -104,7 +126,7 @@ function App() {
                 path="new"
                 element={
                   <ProtectedRoute>
-                    <NewHotel  />
+                    <NewHotel />
                   </ProtectedRoute>
                 }
               />
@@ -130,7 +152,7 @@ function App() {
                 path="new"
                 element={
                   <ProtectedRoute>
-                    <NewRoom  />
+                    <NewRoom />
                   </ProtectedRoute>
                 }
               />

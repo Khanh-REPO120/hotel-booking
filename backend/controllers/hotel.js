@@ -1,5 +1,4 @@
 import Hotel from "../models/Hotel.js";
-import Room from "../models/Room.js";
 import { cleanObj } from "../utils/helpers.js";
 
 export const createHotel = async (req, res, next) => {
