@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import {sendMail} from "./sendMail.js";
 
 export const register = async (req, res, next) => {
   try {
@@ -13,6 +14,7 @@ export const register = async (req, res, next) => {
       password: hash,
     });
 
+    sendMail(newUser.email, 'register', 'https://booking.com')
     await newUser.save();
     res.status(200).send("User has been created.");
   } catch (err) {
