@@ -5,12 +5,18 @@ import MailList from "../../components/web/mailList/MailList";
 import Footer from "../../components/web/footer/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import React,{ useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SearchContext } from "../../context/SearchContext";
 import { AuthContext } from "../../context/AuthContext";
 import Reserve from "../../components/web/reserve/Reserve";
+import DateTimePicker from "react-datetime-picker";
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
+import axios from "axios";
+
 const Hotel = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
@@ -22,8 +28,8 @@ const Hotel = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  console.log(data);
   const { dates, options } = useContext(SearchContext);
+  const [dateApply, setDateApply] = useState(new Date());
   const [roomChoose, setRoomChoose] = useState({});
 
   const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -32,7 +38,7 @@ const Hotel = () => {
     const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
     return diffDays;
   }
-
+  
   let days = 1;
 
   if (dates.length) {
@@ -62,10 +68,30 @@ const Hotel = () => {
 
   const handleOrder = async () => {
     try {
-      window.alert("success")
+      if (window.confirm(`Checkout order confirm?`) == false) {
+        return
+      } 
+      const body = {
+        book_data: [{
+          hotel: data,
+          rooms: [roomChoose],
+          date: dateApply
+        }],
+        customer: user,
+      };
+      if (Object.keys(roomChoose).length === 0) {
+        return window.alert("fail please choose room")
+      }
+      const res = await axios.post("/orders/create-order", body)
+      if (res.status === 200) {
+        navigate("/")
+      }
+
     } catch (error) {
+      window.alert(`fail: ${error}`);
+      console.log(error)
     }
-  }
+  };
 
   const handleClick = () => {
     if (user) {
@@ -82,7 +108,6 @@ const Hotel = () => {
         "loading"
       ) : (
         <div className="hotelContainer homeContainer">
-
           {open && (
             <div className="slider">
               <FontAwesomeIcon icon={faCircleXmark} className="close" onClick={() => setOpen(false)} />
@@ -101,22 +126,9 @@ const Hotel = () => {
             </div>
           )}
           <div className="hotelWrapper">
-            <button onClick={() => handleOrder()} className="bookNow">Đặt trước hoặc đặt ngay!</button>
-            {Object.keys(roomChoose).length > 0 && (
-              <div className="roomChoose">
-                <h2>Phòng đã chọn</h2>
-                <div>
-                  <img
-                    style={{ width: "110px" }}
-                    alt=""
-                    src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/378828506.jpg?k=ea7d10effc56e6e3ded34794423b9a97f43d25c303867e6051d422a08b023480&o=&hp=1"
-                  />
-                </div>
-                <span style={{ fontSize: "17px", fontWeight: "bold" }}>Loại phòng: {roomChoose?.title}</span>
-                <span>Giá phòng: {roomChoose?.price}</span>
-                <span>Số người: {roomChoose?.maxPeople}</span>
-              </div>
-            )}
+            <button onClick={() => handleOrder()} className="bookNow">
+              Đặt trước hoặc đặt ngay!
+            </button>
             <h1 className="hotelTitle">{data.name}</h1>
             <h1 className="hotelTitle">Khách sạn {data.name}</h1>
             <div className="hotelAddress">
@@ -165,6 +177,30 @@ const Hotel = () => {
                 ))}
               </div>
             </div>
+            <h2>Phòng đã chọn</h2>
+
+            {Object.keys(roomChoose).length > 0 && (
+              <div style={{display: 'flex', flexDirection: 'row', gap: 10}}>
+                <div>
+                  <img
+                    style={{ width: "110px" }}
+                    alt=""
+                    src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/378828506.jpg?k=ea7d10effc56e6e3ded34794423b9a97f43d25c303867e6051d422a08b023480&o=&hp=1"
+                  />
+                </div>
+                <div style={{display: 'flex', flexDirection: 'column', gap: 3}}>
+                  <span style={{ fontSize: "17px", fontWeight: "bold" }}>Loại phòng: {roomChoose?.title}</span>
+                  <span>Giá phòng: {roomChoose?.price}</span>
+                  <span>Số người: {roomChoose?.maxPeople}</span>
+                </div>
+                <div>
+                  <DateTimePicker onChange={setDateApply} value={dateApply} minDate={new Date()}/>
+                  <div>
+                    <span>{new Date(dateApply).toDateString()}</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <MailList />
           <Footer />

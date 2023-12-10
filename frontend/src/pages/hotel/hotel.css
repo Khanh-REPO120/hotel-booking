@@ -29,15 +29,6 @@
   cursor: pointer;
 }
 
-.roomChoose {
-  position: absolute;
-  top: 100px;
-  right: 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
 .hotelTitle {
   font-size: 24px;
@@ -172,4 +163,12 @@
   cursor: pointer;
   transform: scale(1.1);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+
+.react-datetime-picker__inputGroup {
+  display: none;
+}
+.react-datetime-picker__clear-button {
+  display: none;
 }

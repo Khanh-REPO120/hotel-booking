@@ -31,7 +31,7 @@ export const createOrder = async (req, res, next) => {
     }
     const newOrder = new Order({
       book_data: new_book_data,
-      total_price: new_book_data.reduce((total, item) => (total += item.price_hotel_rooms)),
+      total_price: new_book_data.reduce((total, item) => (total += item.price_hotel_rooms), 0),
       customer_info: req.body.customer?._id,
     });
     newOrder.save();
