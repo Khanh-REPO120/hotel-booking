@@ -4,19 +4,13 @@ import Header from "../../components/web/header/Header";
 import MailList from "../../components/web/mailList/MailList";
 import Footer from "../../components/web/footer/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleArrowLeft,
-  faCircleArrowRight,
-  faCircleXmark,
-  faLocationDot,
-} from "@fortawesome/free-solid-svg-icons";
-import { useContext, useState } from "react";
+import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import React,{ useContext, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SearchContext } from "../../context/SearchContext";
 import { AuthContext } from "../../context/AuthContext";
 import Reserve from "../../components/web/reserve/Reserve";
-
 const Hotel = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
@@ -28,7 +22,9 @@ const Hotel = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  console.log(data);
   const { dates, options } = useContext(SearchContext);
+  const [roomChoose, setRoomChoose] = useState({});
 
   const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
   function dayDifference(date1, date2) {
@@ -37,13 +33,11 @@ const Hotel = () => {
     return diffDays;
   }
 
-  console.log(options, 111);
-
   let days = 1;
 
   if (dates.length) {
     days = dayDifference(dates[0].endDate, dates[0].startDate);
-  } 
+  }
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -62,6 +56,17 @@ const Hotel = () => {
     setSlideNumber(newSlideNumber);
   };
 
+  const handleClickRoom = (val) => {
+    setRoomChoose(val);
+  };
+
+  const handleOrder = async () => {
+    try {
+      window.alert("success")
+    } catch (error) {
+    }
+  }
+
   const handleClick = () => {
     if (user) {
       setOpenModal(true);
@@ -77,73 +82,87 @@ const Hotel = () => {
         "loading"
       ) : (
         <div className="hotelContainer homeContainer">
-         {open && (
+
+          {open && (
             <div className="slider">
-              <FontAwesomeIcon
-                icon={faCircleXmark}
-                className="close"
-                onClick={() => setOpen(false)}
-              />
-              <FontAwesomeIcon
-                icon={faCircleArrowLeft}
-                className="arrow"
-                onClick={() => handleMove("l")}
-              />
+              <FontAwesomeIcon icon={faCircleXmark} className="close" onClick={() => setOpen(false)} />
+              <FontAwesomeIcon icon={faCircleArrowLeft} className="arrow" onClick={() => handleMove("l")} />
               <div className="sliderWrapper">
                 <img
-                  src={data.photos[slideNumber] || 'https://t-cf.bstatic.com/static/img/theme-index/bg_resorts_new/6e8294d75f648eab2cd2818f0a40854367e584a5.jpg'}
+                  src={
+                    data.photos[slideNumber] ||
+                    "https://t-cf.bstatic.com/static/img/theme-index/bg_resorts_new/6e8294d75f648eab2cd2818f0a40854367e584a5.jpg"
+                  }
                   alt=""
                   className="sliderImg"
                 />
               </div>
-              <FontAwesomeIcon
-                icon={faCircleArrowRight}
-                className="arrow"
-                onClick={() => handleMove("r")}
-              />
+              <FontAwesomeIcon icon={faCircleArrowRight} className="arrow" onClick={() => handleMove("r")} />
             </div>
           )}
           <div className="hotelWrapper">
-            <button className="bookNow">Đặt trước hoặc đặt ngay!</button>
+            <button onClick={() => handleOrder()} className="bookNow">Đặt trước hoặc đặt ngay!</button>
+            {Object.keys(roomChoose).length > 0 && (
+              <div className="roomChoose">
+                <h2>Phòng đã chọn</h2>
+                <div>
+                  <img
+                    style={{ width: "110px" }}
+                    alt=""
+                    src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/378828506.jpg?k=ea7d10effc56e6e3ded34794423b9a97f43d25c303867e6051d422a08b023480&o=&hp=1"
+                  />
+                </div>
+                <span style={{ fontSize: "17px", fontWeight: "bold" }}>Loại phòng: {roomChoose?.title}</span>
+                <span>Giá phòng: {roomChoose?.price}</span>
+                <span>Số người: {roomChoose?.maxPeople}</span>
+              </div>
+            )}
             <h1 className="hotelTitle">{data.name}</h1>
+            <h1 className="hotelTitle">Khách sạn {data.name}</h1>
             <div className="hotelAddress">
               <FontAwesomeIcon icon={faLocationDot} />
               <span>{data.address}</span>
             </div>
-            <span className="hotelDistance">
-              Cách trung tâm thanh phố: {data.distance}m
-            </span>
-            <span className="hotelPriceHighlight">
-              Giá chỉ từ ${data.cheapestPrice}
-            </span>
+            <span style={{ fontSize: "15px" }}>Thành phố: {data.city}</span>
+            <span className="hotelDistance">Cách trung tâm thanh phố: {data.distance}m</span>
+            <span className="hotelPriceHighlight">Giá chỉ từ ${data.cheapestPrice}</span>
             <div className="hotelImages">
               {data.photos?.map((photo, i) => (
                 <div className="hotelImgWrapper" key={i}>
-                  <img
-                    onClick={() => handleOpen(i)}
-                    src={photo}
-                    alt=""
-                    className="hotelImg"
-                  />
+                  <img onClick={() => handleOpen(i)} src={photo} alt="" className="hotelImg" />
                 </div>
               ))}
             </div>
             <div className="hotelDetails">
               <div className="hotelDetailsTexts">
                 <h1 className="hotelTitle">{data.title}</h1>
-                <p className="hotelDesc">{data.desc}</p>
+                <p className="hotelDesc">Mô tả: {data.desc}</p>
               </div>
-              <div className="hotelDetailsPrice">
-                <h1>Thông tin bổ sung</h1>
-                {/*<span>
-                  Located in the real heart of Krakow, this property has an
-                  excellent location score of 9.8!
-                </span>*/}
-                <h2>
-                  <b>${days * data.cheapestPrice * (options.room || 1)}</b> ({days}{" "}
-                  đêm, {options.room || 1}{" "} phòng)
-                </h2>
-                <button onClick={handleClick}>Đặt trước hoặc đặt ngay!</button>
+            </div>
+            <div>
+              <h2>Rooms:</h2>
+              <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
+                {data?.rooms?.map((val, index) => (
+                  <div
+                    onClick={() => handleClickRoom(val)}
+                    className="boxRoom"
+                    key={index}
+                    style={{ display: "flex", flexDirection: "row", gap: 10 }}
+                  >
+                    <div>
+                      <img
+                        style={{ width: "110px" }}
+                        alt=""
+                        src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/378828506.jpg?k=ea7d10effc56e6e3ded34794423b9a97f43d25c303867e6051d422a08b023480&o=&hp=1"
+                      />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                      <span style={{ fontSize: "17px", fontWeight: "bold" }}>Loại phòng: {val.title}</span>
+                      <span>Giá phòng: {val.price}</span>
+                      <span>Số người: {val.maxPeople}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -151,7 +170,7 @@ const Hotel = () => {
           <Footer />
         </div>
       )}
-      {openModal && <Reserve setOpen={setOpenModal} hotelId={id}/>}
+      {openModal && <Reserve setOpen={setOpenModal} hotelId={id} />}
     </div>
   );
 };

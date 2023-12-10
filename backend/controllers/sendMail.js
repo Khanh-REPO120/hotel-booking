@@ -571,6 +571,7 @@ export const sendMail = (email, type, data) => {
     subject: "Hotel Booking",
     html: `
     ${type === "register" && themeRegisterSuccess(data.url)}
+    ${type === "booking" && themeBookingSuccess(data.url)}
 `,
     attachments: data.attachments,
   };
