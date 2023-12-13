@@ -21,10 +21,12 @@ export const uploadImage = async (images) => {
     for(const item of images) {
         const formData = new FormData()
         formData.append("file", item)
-        formData.append("upload_preset", "mdwmyot2")
-        formData.append("cloud_name", "khanhvip")
+        formData.append("upload_preset", "fmirnglg")
+        formData.append("cloud_name", "dx4ykmm3b")
 
-        const res = await fetch("https://api.cloudinary.com/v1_1/khanhvip/upload", {
+        console.log(formData)
+
+        const res = await fetch("https://api.cloudinary.com/v1_1/dx4ykmm3b/image/upload", {
             method: "POST",
             body: formData
         })

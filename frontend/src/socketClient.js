@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { MESSAGE_TYPES } from "./redux/reducers/index";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import { getUserConversation } from "./redux/actions/message";
 
 const SocketClient = () => {
   const { socket } = useSelector((state) => state);
@@ -14,6 +15,7 @@ const SocketClient = () => {
 
   useEffect(() => {
     socket.on("createMessageToClient", (message) => {
+      dispatch(getUserConversation({auth: message?.recipient}))
       dispatch({
         type: MESSAGE_TYPES.CREATE_MESSAGE,
         payload: message,

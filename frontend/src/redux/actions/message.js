@@ -31,11 +31,12 @@ export const getUserConversation = ({auth}) => async (dispatch) => {
 
         res.data.conversation.forEach(item => {
             item.recipients.forEach(info => {
-                if(info._id !== auth.user._id){
+                if(info._id !== auth._id){
                     newArr.push({...info, text: item.text})
                 }
             })
         })
+        
 
         dispatch({
             type: MESSAGE_TYPES.GET_USER_CONVERSATION,

@@ -45,6 +45,9 @@ const SearchUser = () => {
       dispatch(getUserConversation({auth}))
   }, [dispatch, auth])
 
+  console.log(searchUser)
+  console.log(users)
+
   return (
       <>
         <div className="chat_search">
@@ -52,7 +55,7 @@ const SearchUser = () => {
 
               <input type="text" value={searchUser}
               onChange={event => setSearchUser(event.target.value)}
-              placeholder="Search on chat" />
+              placeholder="Search User on chat" />
 
               <button >
                 <SearchOutlined style={{fontSize: 24}}/>
@@ -63,11 +66,11 @@ const SearchUser = () => {
 
         <div className="chat_user_list">
             { 
-                users.length !== 0
+                users.length > 0
                 ? 
                   <>
                     {
-                      users.map(user => (
+                      users?.map(user => (
                           <div key={user._id} onClick={() => handleGetInfoUser(user)}>
                             <DisplayUser user={user}/>
                           </div>
@@ -76,7 +79,7 @@ const SearchUser = () => {
                   </>
                 : 
                   <>
-                    {
+                    {searchUser?.length > 0 &&
                       message.users.map(user => (
                           <div key={user._id} onClick={() => handleGetInfoUser(user)}>
                             <DisplayUser user={user}/>
