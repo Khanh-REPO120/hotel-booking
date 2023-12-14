@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const themeRegisterSuccess = (url) => {
+const themeRegisterSuccess = () => {
   return `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
@@ -146,13 +146,13 @@ const themeRegisterSuccess = (url) => {
                     <td align="center" valign="top" style="padding:0;Margin:0;width:560px">
                      <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                        <tr>
-                        <td align="center" style="padding:0;Margin:0"><!--[if mso]><a href="${url}" target="_blank" hidden>
-    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="${url}" 
+                        <td align="center" style="padding:0;Margin:0"><!--[if mso]><a href="" target="_blank" hidden>
+    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="" 
                   style="height:24px; v-text-anchor:middle; width:556px" arcsize="21%" strokecolor="#0b5394" strokeweight="11px" fillcolor="#0b5394">
       <w:anchorlock></w:anchorlock>
       <center style='color:#ffffff; font-family:arial, "helvetica neue", helvetica, sans-serif; font-size:8px; font-weight:400; line-height:8px;  mso-text-raise:1px'>Wellcome! Book now</center>
     </v:roundrect></a>
-  <![endif]--><!--[if !mso]><!-- --><span class="msohide es-button-border" style="border-style:solid;border-color:#0b5394;background:#0b5394;border-width:11px;display:block;border-radius:5px;width:auto;mso-hide:all"><a href="${url}" class="es-button es-button-1701749340823 msohide" target="_blank" style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FFFFFF;font-size:18px;display:block;background:#0b5394;border-radius:5px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:22px;width:auto;text-align:center;padding:0px 5px;mso-padding-alt:0;mso-border-alt:10px solid #0b5394;mso-hide:all">Wellcome! Book now</a></span><!--<![endif]--></td>
+  <![endif]--><!--[if !mso]><!-- --><span class="msohide es-button-border" style="border-style:solid;border-color:#0b5394;background:#0b5394;border-width:11px;display:block;border-radius:5px;width:auto;mso-hide:all"><a href="" class="es-button es-button-1701749340823 msohide" target="_blank" style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FFFFFF;font-size:18px;display:block;background:#0b5394;border-radius:5px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:22px;width:auto;text-align:center;padding:0px 5px;mso-padding-alt:0;mso-border-alt:10px solid #0b5394;mso-hide:all">Wellcome! Book now</a></span><!--<![endif]--></td>
                        </tr>
                      </table></td>
                    </tr>
@@ -570,8 +570,8 @@ export const sendMail = (email, type, data) => {
     to: email,
     subject: "Hotel Booking",
     html: `
-    ${type === "register" && themeRegisterSuccess(data.url)}
-    ${type === "booking" && themeBookingSuccess(data.url)}
+    ${type === "register" && themeRegisterSuccess()}
+    ${type === "booking" && themeBookingSuccess()}
 `,
     attachments: data.attachments,
   };

@@ -38,7 +38,7 @@ const Hotel = () => {
     const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
     return diffDays;
   }
-  
+
   let days = 1;
 
   if (dates.length) {
@@ -70,7 +70,7 @@ const Hotel = () => {
     try {
       if (window.confirm(`Checkout order confirm?`) == false) {
         return
-      } 
+      }
       const body = {
         book_data: [{
           hotel: data,
@@ -88,7 +88,7 @@ const Hotel = () => {
       }
 
     } catch (error) {
-      window.alert(`fail: ${error}`);
+      window.alert(`fail: ${error.response.data.msg}`);
       console.log(error)
     }
   };
@@ -141,7 +141,7 @@ const Hotel = () => {
             <div className="hotelImages">
               {data.photos?.map((photo, i) => (
                 <div className="hotelImgWrapper" key={i}>
-                  <img onClick={() => handleOpen(i)} src={photo} alt="" className="hotelImg" />
+                  <img style={{ maxWidth: '400px', }} onClick={() => handleOpen(i)} src={photo} alt="" className="hotelImg" />
                 </div>
               ))}
             </div>
@@ -180,7 +180,7 @@ const Hotel = () => {
             <h2>Phòng đã chọn</h2>
 
             {Object.keys(roomChoose).length > 0 && (
-              <div style={{display: 'flex', flexDirection: 'row', gap: 10}}>
+              <div style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
                 <div>
                   <img
                     style={{ width: "110px" }}
@@ -188,13 +188,13 @@ const Hotel = () => {
                     src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/378828506.jpg?k=ea7d10effc56e6e3ded34794423b9a97f43d25c303867e6051d422a08b023480&o=&hp=1"
                   />
                 </div>
-                <div style={{display: 'flex', flexDirection: 'column', gap: 3}}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                   <span style={{ fontSize: "17px", fontWeight: "bold" }}>Loại phòng: {roomChoose?.title}</span>
                   <span>Giá phòng: {roomChoose?.price}</span>
                   <span>Số người: {roomChoose?.maxPeople}</span>
                 </div>
                 <div>
-                  <DateTimePicker onChange={setDateApply} value={dateApply} minDate={new Date()}/>
+                  <DateTimePicker onChange={setDateApply} value={dateApply} minDate={new Date()} />
                   <div>
                     <span>{new Date(dateApply).toDateString()}</span>
                   </div>

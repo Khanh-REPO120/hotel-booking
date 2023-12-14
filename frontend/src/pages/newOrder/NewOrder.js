@@ -40,7 +40,6 @@ const NewOrder = () => {
     const path = pathArr[1] + '/' + pathArr[2];
     const idParam = pathArr[4] || ""
     const { data } = useFetch(`orders/get-my-orders`);
-    console.log(data, "Data")
     const handleChange = (e) => {
         setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
     };
