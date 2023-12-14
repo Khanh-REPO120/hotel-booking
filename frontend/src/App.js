@@ -52,7 +52,7 @@ function App() {
         {
           user?._id && <SocketClient />
         }
-         
+
 
         <Routes>
           <Route path="/">
@@ -75,7 +75,7 @@ function App() {
             path="/chat/:id"
             element={
               <ProtectedRoute>
-                <ChatId/>
+                <ChatId />
               </ProtectedRoute>
             }
           />
@@ -119,7 +119,7 @@ function App() {
                 index
                 element={
                   <ProtectedRoute>
-                    <List columns={hotelColumns} />
+                    <List columns={hotelColumns} addroom />
                   </ProtectedRoute>
                 }
               />
@@ -140,25 +140,9 @@ function App() {
                 }
               />
             </Route>
-            <Route path="rooms">
+            <Route path="rooms/new">
               <Route
-                index
-                element={
-                  <ProtectedRoute>
-                    <List columns={roomColumns} />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path=":productId"
-                element={
-                  <ProtectedRoute>
-                    <Single />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="new"
+                path=":ProductId"
                 element={
                   <ProtectedRoute>
                     <NewRoom />

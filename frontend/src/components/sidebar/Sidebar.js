@@ -29,10 +29,10 @@ const Sidebar = () => {
         <ul>
           <p className="title">MAIN</p>
           <Link to="/" style={{ textDecoration: "none" }}>
-          <li>
-            <DashboardIcon className="icon" />
-            <span>Home page</span>
-          </li>
+            <li>
+              <DashboardIcon className="icon" />
+              <span>Home page</span>
+            </li>
           </Link>
           <p className="title">LISTS</p>
           <Link to="/admin/users" style={{ textDecoration: "none" }}>
@@ -45,12 +45,6 @@ const Sidebar = () => {
             <li>
               <StoreIcon className="icon" />
               <span>Hotels</span>
-            </li>
-          </Link>
-          <Link to="/admin/rooms" style={{ textDecoration: "none" }}>
-            <li>
-              <CreditCardIcon className="icon" />
-              <span>Rooms</span>
             </li>
           </Link>
           <p className="title">LAYOUT</p>

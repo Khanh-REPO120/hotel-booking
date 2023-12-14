@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BOOKING_TYPE, BOOKING_LOCATION } from '../../constant';
 
+
 const NewHotel = () => {
   const [files, setFiles] = useState("");
   const [info, setInfo] = useState({});
@@ -16,7 +17,7 @@ const NewHotel = () => {
   const [err, setErr] = useState(null);
   let navigate = useNavigate();
 
-  const { data, loading, error } = useFetch("/admin/rooms");
+  const { data, loading, error } = useFetch("/admin/hotels");
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -29,7 +30,7 @@ const NewHotel = () => {
     );
     setRooms(value);
   };
-  
+
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -43,7 +44,6 @@ const NewHotel = () => {
             "https://api.cloudinary.com/v1_1/lamadev/image/upload",
             data
           );
-
           const { url } = uploadRes.data;
           return url;
         })
@@ -72,7 +72,7 @@ const NewHotel = () => {
           <h1>Add New Item</h1>
         </div>
         {err && (
-          <p style={{"padding": "20px 50px", "color": "red"}}>{err}</p>
+          <p style={{ "padding": "20px 50px", "color": "red" }}>{err}</p>
         )}
         <div className="bottom">
           <div className="left">
@@ -156,11 +156,11 @@ const NewHotel = () => {
                   {loading
                     ? "loading"
                     : data &&
-                      data.map((room) => (
-                        <option key={room._id} value={room._id}>
-                          {room.title}
-                        </option>
-                      ))}
+                    data.map((room) => (
+                      <option key={room._id} value={room._id}>
+                        {room.title}
+                      </option>
+                    ))}
                 </select>
               </div>
               <button type="submit">Send</button>

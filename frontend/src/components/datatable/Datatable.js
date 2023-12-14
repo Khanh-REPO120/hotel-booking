@@ -1,31 +1,27 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns, userRows } from "../../datatablesource";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import axios from "axios";
 
-const Datatable = ({columns}) => {
+const Datatable = ({ columns, addroom }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const pathArr = location.pathname.split("/");
   const path = pathArr[1] + '/' + pathArr[2];
-  const [list, setList] = useState();
   const { data, loading, error } = useFetch(`/${path}`);
 
-  useEffect(() => {
-    setList(data);
-  }, [data]);
+
 
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/${path}/${id}`).then(function (response) {
         window.location.reload(false);
       });;
-      setList(list.filter((item) => item._id !== id));
-    } catch (err) {}
+    } catch (err) { }
   };
-
   const actionColumn = [
     {
       field: "action",
@@ -34,15 +30,20 @@ const Datatable = ({columns}) => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            {/*<Link to="/users/test" style={{ textDecoration: "none" }}>
-              <div className="viewButton">View</div>
-            </Link>*/}
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row._id)}
             >
               Delete
             </div>
+            {addroom &&
+              <div
+                className="deleteButton"
+                onClick={() => navigate(`/admin/rooms/new/${params.row._id}`)}
+              >
+                Add Room
+              </div>
+            }
           </div>
         );
       },
@@ -62,7 +63,6 @@ const Datatable = ({columns}) => {
         columns={columns.concat(actionColumn)}
         pageSize={9}
         rowsPerPageOptions={[9]}
-        // checkboxSelection
         getRowId={row => row._id}
       />
     </div>
