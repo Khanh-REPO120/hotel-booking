@@ -46,6 +46,7 @@ app.use("/api/admin/users", usersRoute);
 app.use("/api/admin/hotels", hotelsRoute);
 app.use("/api/admin/rooms", roomsRoute);
 app.use("/api/orders", ordersRoute);
+app.use("/api/admin", ordersRoute);
 app.use("/api/messages", chatRoute);
 app.use("/api/v1", webRoute);
 
@@ -61,7 +62,7 @@ app.use((err, req, res, next) => {
 });
 
 
-const server = createServer(app); 
+const server = createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 io.on('connection', (socket) => {
   console.log('Connection established');

@@ -82,3 +82,8 @@ export const roomColumns = [
     width: 100,
   },
 ];
+
+
+export const orderColumns = [
+  { field: "_id", headerName: "ID", width: 70 },
+]

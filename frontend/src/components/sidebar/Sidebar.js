@@ -47,6 +47,12 @@ const Sidebar = () => {
               <span>Hotels</span>
             </li>
           </Link>
+          <Link to="/admin/get-orders" style={{ textDecoration: "none" }}>
+            <li>
+              <StoreIcon className="icon" />
+              <span>Orders</span>
+            </li>
+          </Link>
           <p className="title">LAYOUT</p>
         </ul>
       </div>
