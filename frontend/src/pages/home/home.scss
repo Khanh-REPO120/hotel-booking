@@ -10,3 +10,47 @@
   width: 1024px;
   font-size: 20px;
 }
+.provinceTitle {
+  margin-top: 20px;
+  font-size: 40px;
+  font-weight: bold;
+}
+.provincesList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 10%;
+  justify-content: space-between;
+  .provinceItem {
+    padding: 7px 10px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 10px;
+  }
+  .provinceItem:hover {
+    cursor: pointer;
+    transform: scale(1.07);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: all 0.7s;
+  }
+}
+
+.companyList {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  padding-bottom: 30px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  width: 100%;
+  justify-content: center;
+}
+
+.promotionList{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  > img {
+    width: 150px;
+    height: 150px;
+  }
+}
