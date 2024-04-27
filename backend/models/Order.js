@@ -14,7 +14,8 @@ const OrderSchema = new mongoose.Schema(
     customer_info: { type: Schema.Types.ObjectId, ref: "User" },
     description: String,
     is_active: { type: Boolean, default: false},
-    is_delete: { type: Boolean, default: false}
+    is_delete: { type: Boolean, default: false},
+    is_pay: { type: Boolean, default: false},
   },
   { timestamps: true }
 );
