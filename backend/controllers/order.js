@@ -1,8 +1,12 @@
 import Hotel from "../models/Hotel.js";
 import Order from "../models/Order.js";
-import moment from "moment"
+import moment from "moment";
 import User from "../models/User.js";
 import { sendMail } from "./sendMail.js";
+import Stripe from "stripe";
+const stripe = Stripe(
+  "sk_test_51PAAneDPZ1zrJ8YMTQYZ9gVYXiC8hSNxBBWKAUofMtWLuagfyxMhaRdzj1kgU5ujoSzo2olGuYKPjYBjfhD8jj5U00XGzIvstb"
+);
 
 export const createOrder = async (req, res, next) => {
   try {
@@ -24,13 +28,17 @@ export const createOrder = async (req, res, next) => {
       new_data["hotel"] = data.hotel?._id;
       new_data["rooms"] = data.rooms?.map((item) => item._id);
       new_data["date"] = data?.date;
-      const listOrder = await Order.find({ "book_data.hotel": data?.hotel?._id, "book_data.rooms": data?.rooms?.map((e) => e._id), is_delete: false })
+      const listOrder = await Order.find({
+        "book_data.hotel": data?.hotel?._id,
+        "book_data.rooms": data?.rooms?.map((e) => e._id),
+        is_delete: false,
+      });
       for (let orderObj of listOrder) {
         let currentDbTime = moment(moment(orderObj.book_data[0].date).format("YYYY-MM-DD")).valueOf();
         let currentTime = moment(moment(data?.date).format("YYYY-MM-DD")).valueOf();
         if (currentDbTime === currentTime) {
-          error2 = true
-          break
+          error2 = true;
+          break;
         }
       }
       if (!new_data.date || !new_data.price_hotel_rooms || !new_data.hotel || new_data.rooms?.length === 0) {
@@ -45,7 +53,7 @@ export const createOrder = async (req, res, next) => {
     if (error2) {
       return res.status(400).send({ msg: "Have people booking on date" });
     }
-    const userDB = await User.findOne({ _id: req.user.id })
+    const userDB = await User.findOne({ _id: req.user.id });
 
     const newOrder = new Order({
       book_data: new_book_data,
@@ -138,7 +146,7 @@ export const getDetailOrder = async (req, res, next) => {
       })
       .populate({
         path: "customer_info",
-        model: "User"
+        model: "User",
       });
 
     res.send(orderDetail);
@@ -151,7 +159,7 @@ export const updateOrder = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { description, is_delete } = req.body;
-    const update = {}
+    const update = {};
 
     const orderDetail = await Order.findById(id);
 
@@ -170,6 +178,52 @@ export const updateOrder = async (req, res, next) => {
     const updateOrder = await Order.findByIdAndUpdate(id, { $set: update }, { new: true, upsert: true });
 
     res.send(updateOrder);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const payOrder = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const orderDetail = await Order.findById(id)
+      .populate({
+        path: "book_data.hotel",
+        model: "Hotel",
+      })
+      .populate({
+        path: "book_data.rooms",
+        model: "Room",
+      })
+      .populate({
+        path: "customer_info",
+        model: "User",
+      });
+
+    if (!orderDetail) return res.status(400).send({ msg: "Order not existed" });
+
+    if (orderDetail.is_pay === true) return res.status(400).send({ msg: "Order has paid" });
+
+    const session = await stripe.checkout.sessions.create({
+      line_items: orderDetail?.book_data?.map((item) => {
+        let object = {
+          price_data: {
+            currency: "USD",
+            product_data: {
+              name: item.hotel.name || "",
+            },
+            unit_amount: item.price_hotel_rooms,
+          },
+          quantity: 1,
+        };
+        return object;
+      }),
+      mode: "payment",
+      success_url: `http://localhost:3000/my-orders`,
+      cancel_url: `http://localhost:3000/my-orders`,
+    });
+
+    res.send({ url: session.url });
   } catch (error) {
     next(error);
   }
@@ -198,7 +252,7 @@ export const getAllOrder = async (req, res, next) => {
       })
       .populate({
         path: "customer_info",
-        model: "User"
+        model: "User",
       })
       .sort({ createdAt: -1 });
 
@@ -206,7 +260,7 @@ export const getAllOrder = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const activeOrderSendMail = async (req, res, next) => {
   try {
@@ -217,14 +271,34 @@ export const activeOrderSendMail = async (req, res, next) => {
     if (!orderDetail) return res.status(400).send({ msg: "Order not existed" });
 
     if (orderDetail.is_delete === true) return res.status(400).send({ msg: "Order has deleted" });
+    if (orderDetail.is_active === true) return res.status(400).send({ msg: "Order has activated" });
 
-    const handleActiveOrder = await Order.findByIdAndUpdate(id, { is_active: true }, { new: true, upsert: true })
+    const handleActiveOrder = await Order.findByIdAndUpdate(id, { is_active: true }, { new: true, upsert: true });
 
-    const userDB = await User.findOne({ _id: orderDetail.customer_info })
+    const userDB = await User.findOne({ _id: orderDetail.customer_info });
     sendMail(userDB.email, "booking", {});
-    res.send({ message: 'send mail order success', order: handleActiveOrder })
-
+    res.send({ message: "send mail order success", order: handleActiveOrder });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
+
+export const activePaySendMail = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const orderDetail = await Order.findById(id);
+
+    if (!orderDetail) return res.status(400).send({ msg: "Order not existed" });
+
+    if (orderDetail.is_pay === true) return res.status(400).send({ msg: "Order has paid" });
+
+    const handlePay = await Order.findByIdAndUpdate(id, { is_pay: true }, { new: true, upsert: true });
+
+    const userDB = await User.findOne({ _id: orderDetail.customer_info });
+    sendMail(userDB.email, "pay", { id });
+    res.send({ message: "send mail order pay", order: handlePay });
+  } catch (error) {
+    next(error);
+  }
+};

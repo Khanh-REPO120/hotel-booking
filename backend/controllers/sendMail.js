@@ -572,6 +572,7 @@ export const sendMail = (email, type, data) => {
     html: `
     ${type === "register" && themeRegisterSuccess()}
     ${type === "booking" && themeBookingSuccess()}
+    ${type === "pay" && `<p>Order had paid, accepted by ADMIN #{data.id}</p>`}
 `,
     attachments: data.attachments,
   };
