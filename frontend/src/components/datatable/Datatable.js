@@ -10,26 +10,43 @@ const Datatable = ({ columns, addroom, order }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const pathArr = location.pathname.split("/");
-  const path = pathArr[1] + '/' + pathArr[2];
+  const path = pathArr[1] + "/" + pathArr[2];
   const { data, loading, error } = useFetch(`/${path}`);
-
-
 
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/${path}/${id}`).then(function (response) {
         window.location.reload(false);
-      });;
-    } catch (err) { }
+      });
+    } catch (err) {}
   };
 
   const handleOrder = async (id) => {
     try {
+      if (window.confirm(`Accept Order?`) == false) {
+        return;
+      }
       await axios.put(`/admin/active-order/${id}`).then(function (response) {
         window.location.reload(true);
-      });;
-    } catch (err) { }
+      });
+    } catch (err) {
+      alert(err?.response?.data?.msg || "");
+    }
   };
+
+  const handleAcceptPay = async (id) => {
+    try {
+      if (window.confirm(`Accept Pay?`) == false) {
+        return;
+      }
+      await axios.put(`/admin/active-pay/${id}`).then(function (response) {
+        window.location.reload(true);
+      });
+    } catch (err) {
+      alert(err?.response?.data?.msg || "");
+    }
+  };
+
   const actionColumn = [
     {
       field: "action",
@@ -38,20 +55,14 @@ const Datatable = ({ columns, addroom, order }) => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <div
-              className="deleteButton"
-              onClick={() => handleDelete(params.row._id)}
-            >
+            <div className="deleteButton" onClick={() => handleDelete(params.row._id)}>
               Delete
             </div>
-            {addroom &&
-              <div
-                className="deleteButton"
-                onClick={() => navigate(`/admin/rooms/new/${params.row._id}`)}
-              >
+            {addroom && (
+              <div className="deleteButton" onClick={() => navigate(`/admin/rooms/new/${params.row._id}`)}>
                 Add Room
               </div>
-            }
+            )}
           </div>
         );
       },
@@ -64,9 +75,7 @@ const Datatable = ({ columns, addroom, order }) => {
       headerName: "Hotel",
       width: 200,
       renderCell: ({ row }) => {
-        return (
-          <div>{row?.book_data?.[0]?.hotel?.name}</div>
-        );
+        return <div>{row?.book_data?.[0]?.hotel?.name}</div>;
       },
     },
     {
@@ -77,7 +86,15 @@ const Datatable = ({ columns, addroom, order }) => {
     {
       field: "is_active",
       headerName: "Status",
-      width: 100,
+      width: 170,
+      renderCell: (params) => {
+        return (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div>Status: {params.row.is_active ? "active" : "un-active"}</div>
+            <div style={{ fontWeight: "bold" }}>Status Pay: {params.row.is_pay ? "paid" : "un-paid"}</div>
+          </div>
+        );
+      },
     },
     {
       field: "action",
@@ -86,18 +103,18 @@ const Datatable = ({ columns, addroom, order }) => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <div
-              className="deleteButton"
-              onClick={() => handleOrder(params.row._id)}
-            >
+            <div className="deleteButton" onClick={() => handleOrder(params.row._id)}>
               Accept
+            </div>
+
+            <div className="acceptPay" onClick={() => handleAcceptPay(params.row._id)}>
+              Accept Pay
             </div>
           </div>
         );
       },
     },
-
-  ]
+  ];
   return (
     <div className="datatable">
       <div className="datatableTitle">
@@ -106,22 +123,25 @@ const Datatable = ({ columns, addroom, order }) => {
           Add New
         </Link>
       </div>
-      {order ? <DataGrid
-        className="datagrid"
-        rows={data}
-        columns={columns.concat(orderColumn)}
-        pageSize={9}
-        rowsPerPageOptions={[9]}
-        getRowId={row => row._id}
-      /> : <DataGrid
-        className="datagrid"
-        rows={data}
-        columns={columns.concat(actionColumn)}
-        pageSize={9}
-        rowsPerPageOptions={[9]}
-        getRowId={row => row._id}
-      />}
-
+      {order ? (
+        <DataGrid
+          className="datagrid"
+          rows={data}
+          columns={columns.concat(orderColumn)}
+          pageSize={9}
+          rowsPerPageOptions={[9]}
+          getRowId={(row) => row._id}
+        />
+      ) : (
+        <DataGrid
+          className="datagrid"
+          rows={data}
+          columns={columns.concat(actionColumn)}
+          pageSize={9}
+          rowsPerPageOptions={[9]}
+          getRowId={(row) => row._id}
+        />
+      )}
     </div>
   );
 };
