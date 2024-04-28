@@ -127,7 +127,7 @@ const Order = () => {
               <div style={{ display: "flex", flexDirection: "column", flex: 1, minWidth: "150px" }}>
                 <span>Ghi chú: {item.description}</span>
                 <input
-                  value={item.description}
+                  defaultValue={item.description}
                   onChange={(e) => {
                     orders[index].description = e.target.value;
                   }}
